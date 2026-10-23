@@ -26,6 +26,12 @@
 #include <SDL_scancode.h>
 #include <SDL_gamecontroller.h>
 #include <SDL_messagebox.h>
+#if defined(__ANDROID__)
+#include <unistd.h>
+#include <SDL_system.h>
+#include <SDL_main.h>	// renames main() to SDL_main(), which the SDL activity looks up
+#include <SDL_hints.h>
+#endif
 
 #include "PsyX/PsyX_globals.h"
 
@@ -473,6 +479,19 @@ void SwitchMappings(int menu)
 int main(int argc, char** argv)
 {
 	ini_t* config;
+
+#if defined(__ANDROID__)
+	// SDL would otherwise rotate the activity to portrait when the device is held that way
+	SDL_SetHint(SDL_HINT_ORIENTATIONS, "LandscapeLeft LandscapeRight");
+
+	// config.ini and the game data live in the app's external files folder
+	// (/sdcard/Android/data/<package>/files), all paths are relative to it
+	{
+		const char* dataPath = SDL_AndroidGetExternalStoragePath();
+		if (dataPath)
+			chdir(dataPath);
+	}
+#endif
 
 #if USE_CRT_MALLOC
 	_overlay_buffer = (char*)malloc(0x50000);			// 0x1C0000

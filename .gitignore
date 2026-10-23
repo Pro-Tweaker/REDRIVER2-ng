@@ -43,3 +43,7 @@ src_rebuild/obj/*
 src_rebuild/build*
 src_rebuild/*.make
 src_rebuild/Makefile
+
+# local disc images and tool caches
+ISOS/
+tools/**/__pycache__/

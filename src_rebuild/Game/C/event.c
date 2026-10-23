@@ -2986,7 +2986,7 @@ void DrawEvents(int camera)
 
 										pos.vx = pos.vx - boatOffset.vx;
 										pos.vz = pos.vz - boatOffset.vz;
-										pos.vy = (pos.vy - boatOffset.vy) + FIXEDH((int)ev->node * RSIN(*ev->data));
+										pos.vy = (pos.vy - boatOffset.vy) + FIXEDH((int)(intptr)ev->node * RSIN(*ev->data));
 									}
 									else if (type == 0x400)
 									{
@@ -3557,7 +3557,7 @@ VECTOR* TriggerEvent(int i)
 						event[1].node++;
 					}
 
-					SetMSoundVar(1, &event[1].position);
+					SetMSoundVar(2, &event[1].position);
 
 					event[1].timer = 0;
 					events.cameraEvent = &event[1];
