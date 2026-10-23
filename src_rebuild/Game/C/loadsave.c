@@ -1,4 +1,7 @@
 #include "driver2.h"
+#if defined(__ANDROID__)
+#include <SDL_system.h>
+#endif
 #include "loadsave.h"
 #include "replays.h"
 #include "system.h"
@@ -90,7 +93,14 @@ void GetGameProfilePath(char* str)
 {
 	char* homepath;
 
+#if defined(__ANDROID__)
+	// apps have no HOME, use the app folder (same place as the game files)
+	homepath = (char*)SDL_AndroidGetExternalStoragePath();
+	if (!homepath)
+		homepath = (char*)SDL_AndroidGetInternalStoragePath();
+#else
 	homepath = getenv(HOME_ENV); // "USERPROFILE"
+#endif
 
 	if (homepath)
 	{

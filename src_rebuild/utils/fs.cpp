@@ -23,7 +23,11 @@ void FS_FixPathSlashes(char* pathbuff)
 #elif defined (__unix__)
 
 #include <sys/stat.h>
+#if defined(__ANDROID__) && __ANDROID_API__ < 28
+#include "glob_compat.h"
+#else
 #include <glob.h>		// glob(), globfree()
+#endif
 #include <malloc.h>
 
 void FS_FixPathSlashes(char* pathbuff)

@@ -1,0 +1,49 @@
+plugins {
+    id 'com.android.application'
+}
+
+// SDL's Java glue is taken straight from the SDL sources the native build uses
+def sdlJava = file('../../../dependencies/SDL2-2.32.10/android-project/app/src/main/java')
+
+android {
+    namespace 'io.github.opendriver.redriver2'
+    compileSdk 35
+    ndkVersion '27.1.12297006'
+
+    defaultConfig {
+        applicationId 'io.github.opendriver.redriver2'
+        minSdk 26
+        targetSdk 35
+        versionCode 1
+        versionName '1.0'
+
+        ndk {
+            abiFilters 'arm64-v8a'
+        }
+        externalNativeBuild {
+            cmake {
+                arguments '-DANDROID_STL=c++_shared', '-DCMAKE_POLICY_VERSION_MINIMUM=3.5'
+            }
+        }
+    }
+
+    sourceSets {
+        main {
+            java.srcDirs += sdlJava
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path file('../CMakeLists.txt')
+            version '3.22.1'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.debug   // sideload build, not for store upload
+        }
+    }
+}
